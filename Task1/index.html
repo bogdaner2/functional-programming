@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<button onclick="
+const init = findIncorrectValues(initial,(item) => item.price && item.date && item.name);
+const res = createMatrix(
+        inUpperCase(
+            addDollarSignToPrice(
+                sortByDate(init.correctValues)
+                    )
+            )
+        );
+
+print(res);
+print(init.incorrectValues);
+
+outputHTMLTable(res);
+
+document.write('Incorrect values:')
+outputHTMLItems(init.incorrectValues);
+
+">Get</button>
+<script src="lodash.js"></script>
+<script src="task1.js"></script>
+</body>
+</html>
