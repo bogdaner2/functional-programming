@@ -10,16 +10,15 @@ const initial = [
     { name: 'chair', date: '2018-09-10' },
     { name: 'Window', price: 300, date: '2018-05-05' }
 ];
-const print = (list) => list.map(x => console.log(x));
+const print = (list) => _.map(list,x => console.log(x));
 const findIncorrectValues = (list,pred) => {
-    let correct = list.filter(pred);
-    let incorrect = list.filter(x => !correct.includes(x));
-    return {correctValues : correct,incorrectValues : incorrect}
+    const result = _.partition(list,pred)
+    return {correctValues : result[0],incorrectValues : result[1]}
 }
 const inUpperCase = (list) =>
-    list.map(x => Object.assign({...x, name : _.upperFirst(x.name)}));
+    list.map(x => Object.assign({},x,{name : _.upperFirst(x.name)}));
 const addDollarSignToPrice = (list) =>
-    list.map(x => Object.assign({...x, price : `$${x.price}`}))
+    list.map(x => Object.assign({},x,{price : `$${x.price}`}))
 const sortByDate = (list) =>
     [...list].sort((a,b)=> {return new Date(a.date) - new Date(b.date)});
 const createMatrix = (list) =>
