@@ -1,4 +1,4 @@
-const { groupBy} = _;
+const { sortBy } = _;
 const initial = [
     { name: 'TV', price: 300, date: '2018-10-10' },
     { name: 'laptop', price: 600, date: '2018-10-12' },
@@ -11,11 +11,14 @@ const initial = [
     { name: 'chair', date: '2018-09-10' },
     { name: 'Window', price: 300, date: '2018-05-05' }
 ];
-const print = (list) => _.map(list,x => console.log(x));
+
+const print = (list) => {map(list,x => console.log(x)); return map(list,x => x); };
+
 const findIncorrectValues = predicate => list => {
     const [correctValues , incorrectValues] = _.partition(list,predicate);
     return {correctValues,incorrectValues};
 }
+
 const inUpperCase = (list) =>
     list.map(x => Object.assign({},x,{name : _.upperFirst(x.name)}));
 
@@ -23,23 +26,29 @@ const addDollarSignToPrice = (list) =>
     list.map(x => Object.assign({},x,{price : `$${x.price}`}));
 
 const mapper = (list) =>
-    list.map(x => Object.assign({},x,{price : `$${x.price}` , name : _.upperFirst(x.name)}))
+    map(list,x => Object.assign({},x,{price : `$${x.price}` , name : _.upperFirst(x.name)}))
+
+const sort_By_Date = (list) =>
+    [...list].sort((a,b)=> {return new Date(a.date) - new Date(b.date)});
 
 const sortByDate = (list) =>
-    [...list].sort((a,b)=> {return new Date(a.date) - new Date(b.date)});
+    sortBy(list,x => x.date)
 
 const createMatrix = (list) =>
      list.map(x => [x.date, `${x.name}-${x.price}`])
 
-const executeTask1 = (test) => {
+const executeTask_1 = (test) => {
 
- _.flow([
-    map(mapper),
-    groupBy('date'),
-    print]
-)
- (findIncorrectValues((item) => item.price && item.date && item.name)(test).correctValues);
+ const filter = findIncorrectValues((item) => item.price && item.date && item.name);
 
+ flow([
+     mapper,
+     sortByDate,
+     print,
+     createMatrix,
+     outputHTMLTable
+      ]
+     )(filter(test).correctValues);
 }
 
 const outputHTMLTable = (matrix) => {

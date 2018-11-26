@@ -48,15 +48,19 @@ const calculateNewPosition = (matrix,size) =>
 const rearrangeMatrix = (table) => (column, row, item) => {
     flow([])('');
     const size = table.length;
-    const array = flatten(table);
-    const removeAc = filter(array,x => x !== item);
-    const insertAc  = insert(column * size + row, removeAc, item);
-    const array1 = chunk(insertAc,size);
-    const test = calculateNewPosition(array1,size);
-    return test;
+    const flattenArr = flatten(table);
+    const array = insertItem(flattenArr, item, column * size + row);
+    const matrix = chunk(array,size);
+    const matrixWithNewPositions = calculateNewPosition(matrix,size);
+    return matrixWithNewPositions;
 }
 
-const executeTask2 = (table) =>  {
+const insertItem = (arr,item,position) => {
+    const newArr = filter(arr, x => x !== item);
+    return insert(position, newArr, item);
+}
+
+const executeTask_2 = (table) =>  {
     const newColumn = 2;
     const newRow = 2;
     const item = table[0][0];
