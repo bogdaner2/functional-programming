@@ -6,7 +6,7 @@
 </head>
 <body>
 <button onclick="
-const init = findIncorrectValues(initial,(item) => item.price && item.date && item.name);
+const init = findIncorrectValues((item) => item.price && item.date && item.name)(initial);
 const res = createMatrix(
         inUpperCase(
             addDollarSignToPrice(
@@ -23,8 +23,11 @@ outputHTMLTable(res);
 document.write('Incorrect values:')
 outputHTMLItems(init.incorrectValues);
 
-">Get</button>
+">Task1</button>
+<button onclick="executeTask2(table)">Task2</button>
+<button onclick="executeTask1(initial)">Task1 (rewrite)</button>
 <script src="lodash.js"></script>
-<script src="task1.js"></script>
+<script src="Task1/task1.js"></script>
+<script src="Task2/task2.js"></script>
 </body>
 </html>

@@ -1,3 +1,4 @@
+const { groupBy} = _;
 const initial = [
     { name: 'TV', price: 300, date: '2018-10-10' },
     { name: 'laptop', price: 600, date: '2018-10-12' },
@@ -11,19 +12,35 @@ const initial = [
     { name: 'Window', price: 300, date: '2018-05-05' }
 ];
 const print = (list) => _.map(list,x => console.log(x));
-const findIncorrectValues = (list,pred) => {
-    const result = _.partition(list,pred)
-    return {correctValues : result[0],incorrectValues : result[1]}
+const findIncorrectValues = predicate => list => {
+    const [correctValues , incorrectValues] = _.partition(list,predicate);
+    return {correctValues,incorrectValues};
 }
 const inUpperCase = (list) =>
     list.map(x => Object.assign({},x,{name : _.upperFirst(x.name)}));
+
 const addDollarSignToPrice = (list) =>
-    list.map(x => Object.assign({},x,{price : `$${x.price}`}))
+    list.map(x => Object.assign({},x,{price : `$${x.price}`}));
+
+const mapper = (list) =>
+    list.map(x => Object.assign({},x,{price : `$${x.price}` , name : _.upperFirst(x.name)}))
+
 const sortByDate = (list) =>
     [...list].sort((a,b)=> {return new Date(a.date) - new Date(b.date)});
+
 const createMatrix = (list) =>
      list.map(x => [x.date, `${x.name}-${x.price}`])
 
+const executeTask1 = (test) => {
+
+ _.flow([
+    map(mapper),
+    groupBy('date'),
+    print]
+)
+ (findIncorrectValues((item) => item.price && item.date && item.name)(test).correctValues);
+
+}
 
 const outputHTMLTable = (matrix) => {
     let table= "<table border='1'>";
@@ -46,6 +63,8 @@ const outputHTMLTable = (matrix) => {
 const outputHTMLItems = (...args) => {
     args.forEach(x => document.write(JSON.stringify(x)));
 }
+
+
 
 
 
