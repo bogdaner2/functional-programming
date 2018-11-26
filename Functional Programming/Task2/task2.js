@@ -46,7 +46,6 @@ const calculateNewPosition = (matrix,size) =>
     )
 
 const rearrangeMatrix = (table) => (column, row, item) => {
-    flow([])('');
     const size = table.length;
     const flattenArr = flatten(table);
     const array = insertItem(flattenArr, item, column * size + row);
