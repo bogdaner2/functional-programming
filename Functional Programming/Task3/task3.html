@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Task3</title>
+</head>
+<body>
+<div style="display: inline-flex;flex-direction: column;margin:0 calc(50% - 175px);width: 350px">
+    <div style="display:inline-block;border: 1px solid black;padding: 10px;">
+    <form id="formAdd">
+        <h4>Create/Edit Entity</h4>
+        <hr>
+        <div style="display:inline">
+            Id for update/show/delete/mark entity <br>
+            Id: <input type="number" id="id" name="id">
+        </div>
+        <hr />
+        Title: <input type="text" id="title" name="title"><br/>
+        Author: <input type="text" id="author" name="author"><br/>
+        Publishing House <input type="text" id="publishingHouse" name="publishingHouse"><br/>
+        Date: <input type="date" id="date" name="date" min="1000-01-01" max="2200-12-31"><br/>
+        Tags(Words divide by ','): <input type="text" id="tags" name="tags"><br/>
+        Is Read?: <input type="checkbox" id="isRead" name="isRead"><br/>
+
+    </form>
+        <button onclick="printBooksCollection(
+            create({
+            title: $('#title').val(),
+            author : $('#author').val(),
+            publishingHouse : $('#publishingHouse').val(),
+            tags : $('#tags').val().split(','),
+            date : $('#date').val(),
+            isRead :  $('#isRead').is(':checked')
+                   }
+            ,books));
+        ">Add entity</button>
+
+        <button onclick="printBooksCollection(
+            update($('#id').val(),{
+            title: $('#title').val(),
+            author : $('#author').val(),
+            publishingHouse : $('#publishingHouse').val(),
+            tags : $('#tags').val().split(','),
+            date : $('#date').val(),
+            isRead : $('#isRead').is(':checked')
+                   }
+            ,books))"
+        >Edit entity</button>
+        <hr>
+        <h4>Filter by (default : Title)</h4>
+        <input type="checkbox" class="selectOne" data-id="author"/> Author
+        <input type="checkbox" class="selectOne" data-id="tag"/> Tag
+        <input type="checkbox" class="selectOne" data-id="date"/> Date <br/>
+        Filter : <input type="text" id="filter" name="filter">
+    </div>
+    <br>
+<button onclick="printBooksCollection(read(parseInt($('#id').val()),books))">Show entity</button>
+<button onclick="printBooksCollection(readAll(books))">Show list</button>
+<button onclick="printBooksCollection(remove(parseInt($('#id').val()),books))">Remove entity</button>
+<button onclick="printBooksCollection(markAsRead(parseInt($('#id').val()),books));">Mark entity as read</button>
+<button onclick="selectCriteria();printBooksCollection(filterByCriteria(books))">Filter entities by author, tag, date</button>
+<button onclick="printBooksCollection(filterByAlreadyRead(books))">Filter entities that are already read</button>
+    <br/>
+    <div id="main"></div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/immutable/3.8.2/immutable.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="task3.js"></script>
+<script>
+    var filterCriteria = 'title';
+    var filterByCriteria;
+    $(document).ready(function(){
+        $('.selectOne').on('change', function() {
+            $('.selectOne').not(this).prop('checked', false);
+            filterCriteria = '';
+            if($(this).is(":checked"))
+            {
+                filterCriteria = $(this).data( "id" );
+            }
+            else{
+                filterCriteria = 'title';
+            }
+        });
+    });
+    function selectCriteria() {
+        switch (filterCriteria) {
+            case 'author' : filterByCriteria = filterByPred(x => x.author == $('#filter').val());
+                break;
+            case 'tag' : filterByCriteria = filterByPred(x => x.tags.includes($('#filter').val()));
+                break;
+            case 'date' : filterByCriteria = filterByPred(x => x.date == $('#filter').val());
+                break;
+            default:  filterByCriteria = filterByPred(x => x.title === $('#filter').val());
+                break;
+        }
+    }
+</script>
+</body>
+</html>
